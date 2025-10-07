@@ -1,5 +1,5 @@
 #include<iostream>
-#include<./QueueByArray>
+#include"./QueueByArray"
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
@@ -16,197 +16,288 @@ class TreeNode{
 };
 
 template <class T>
-class BinaryTree{
+class BinaryTree
+{
 
-	public:
-	TreeNode<T>* root;	
+public:
+	TreeNode<T>* root;
 	int numOfNodes;
-	
-	BinaryTree():root(NULL), numOfNodes(0){}
 
-	TreeNode<T>* find(T _data){
-		if(root == NULL){
-			out<<"Tree Is EMPTY\n";
+	BinaryTree() : root(NULL), numOfNodes(0) {}
+
+	TreeNode<T>* find(T _data)
+	{
+		if (root == NULL)
+		{
+			cout << "Tree Is EMPTY\n";
 			return NULL;
-		} 
+		}
 		Queue<TreeNode<T>*> q1;
 		q1.enqueue(this->root);
-		while(!q1.isEmpty()){
-			TreeNode<T>* currentNode = q1.dequeue() ;
-			if(currentNode->data == _data )	return currentNode;
-			else{
-				if(currentNode->left != NULL)	q1.enqueue(currentNode->left);
-				if(currentNode->right != NULL)	q1.enqueue(currentNode->right);
-			}			
+		while (!q1.isEmpty())
+		{
+			TreeNode<T>* currentNode = q1.dequeue();
+			if (currentNode->data == _data)
+				return currentNode;
+			else
+			{
+				if (currentNode->left != NULL)
+					q1.enqueue(currentNode->left);
+				if (currentNode->right != NULL)
+					q1.enqueue(currentNode->right);
+			}
 		}
-		cout<<"ITEM NOT FOUND\n";
+		cout << "ITEM NOT FOUND\n";
 		return NULL;
-				
 	}
-	
-	void insert(T _data){
-		if( root == NULL){
+
+	void insert(T _data)
+	{
+		if (root == NULL)
+		{
 			TreeNode<T>* newNode = new TreeNode<T>(_data);
 			root = newNode;
 			++numOfNodes;
 			return;
-		}else{
-			Queue<TreeNode<T>*> q1;	
-			//Queue<TreeNode<T>*>* q1 = new Queue<TreeNode<T>*>();			
+		}
+		else
+		{
+			Queue<TreeNode<T>*> q1;
+			// Queue<TreeNode<T>*>* q1 = new Queue<TreeNode<T>*>();
 			q1.enqueue(root);
-			while(!	q1.isEmpty() ){
+			while (!q1.isEmpty())
+			{
 				TreeNode<T>* currentNode = q1.dequeue();
-				if(currentNode->left == NULL){
-					currentNode->left= new TreeNode<T>(_data);
+				if (currentNode->left == NULL)
+				{
+					currentNode->left = new TreeNode<T>(_data);
 					++numOfNodes;
-	
+
 					break;
-				}else{
+				}
+				else
+				{
 					q1.enqueue(currentNode->left);
 				}
-				if(currentNode->right == NULL){
-					currentNode->right= new TreeNode<T>(_data);
+				if (currentNode->right == NULL)
+				{
+					currentNode->right = new TreeNode<T>(_data);
 					++numOfNodes;
 					break;
-				}else{
+				}
+				else
+				{
 					q1.enqueue(currentNode->right);
 				}
-				
 			}
 		}
 	}
 
-	void update(T node, T newData ){
-		TreeNode<T>*  foundNode = this->find(node);
-		if(foundNode!=NULL){
-			foundNode->data = newData;	
+	virtual void update(T node, T newData) final
+	{
+		TreeNode<T>* foundNode = this->find(node);
+		if (foundNode != NULL)
+		{
+			foundNode->data = newData;
 		}
 	}
 
-	void deleteNode(T _data){
-		if(root == NULL){
-			cout<<"Tree Is EMPTY\n";
+	void deleteNode(T _data)
+	{
+		if (root == NULL)
+		{
+			cout << "Tree Is EMPTY\n";
 			return;
-		} 
-		
+		}
+
 		Queue<TreeNode<T>*> q1;
 		q1.enqueue(this->root);
-		
-		TreeNode<T>* targetNode =NULL;
+
+		TreeNode<T>* targetNode = NULL;
 		TreeNode<T>* lastParent = NULL;
-		TreeNode<T>* lastNode=NULL;
-		
-		while(!q1.isEmpty()){
-			TreeNode<T>* currentNode = q1.dequeue() ;
-			if(currentNode->data == _data )	targetNode = currentNode;
-			if(currentNode->left != NULL){
+		TreeNode<T>* lastNode = NULL;
+
+		while (!q1.isEmpty())
+		{
+			TreeNode<T>* currentNode = q1.dequeue();
+			if (currentNode->data == _data)
+				targetNode = currentNode;
+			if (currentNode->left != NULL)
+			{
 				lastParent = currentNode;
 				q1.enqueue(currentNode->left);
-			}	
-			if(currentNode->right != NULL)	{
-				lastParent = currentNode;
-				q1.enqueue(currentNode->right);	
 			}
-			lastNode=currentNode;
+			if (currentNode->right != NULL)
+			{
+				lastParent = currentNode;
+				q1.enqueue(currentNode->right);
+			}
+			lastNode = currentNode;
 		}
-	   	
-		if (targetNode == NULL) {
-	        cout << "Node not found\n";
-	        return;
-	    }
-		//to delete lastNode =>	avoid double deleting
-	   if (targetNode == lastNode) {
-	        if (lastParent != NULL) {
-	            if (lastParent->left == lastNode) lastParent->left = NULL;
-	            else if (lastParent->right == lastNode) lastParent->right = NULL;
-	        } else {
-	            root = NULL; //The only element in tree is root and i want to delete it
-	        }
-	        delete lastNode;
-	        --numOfNodes;
-	        return;
-	    }
-		
+
+		if (targetNode == NULL)
+		{
+			cout << "Node not found\n";
+			return;
+		}
+		// to delete lastNode =>	avoid double deleting
+		if (targetNode == lastNode)
+		{
+			if (lastParent != NULL)
+			{
+				if (lastParent->left == lastNode)
+					lastParent->left = NULL;
+				else if (lastParent->right == lastNode)
+					lastParent->right = NULL;
+			}
+			else
+			{
+				root = NULL; // The only element in tree is root and i want to delete it
+			}
+			delete lastNode;
+			--numOfNodes;
+			return;
+		}
+
 		targetNode->data = lastNode->data;
-    	if (lastParent != NULL) {
-	        if (lastParent->left == lastNode) {
-	            delete lastParent->left;
-	            lastParent->left = NULL;
-	        } else if (lastParent->right == lastNode) {
-	            delete lastParent->right;
-	            lastParent->right = NULL;
-        	}
-        	--numOfNodes;
-    	}				
+		if (lastParent != NULL)
+		{
+			if (lastParent->left == lastNode)
+			{
+				delete lastParent->left;
+				lastParent->left = NULL;
+			}
+			else if (lastParent->right == lastNode)
+			{
+				delete lastParent->right;
+				lastParent->right = NULL;
+			}
+			--numOfNodes;
+		}
 	}
 
-	
-	void print(){
-			if(root == NULL){
-				cout<<"The Tree Is Empty\n";
-			}else{
-				Queue<TreeNode<T>*> q1;
-				q1.enqueue(root);
-				while(!q1.isEmpty()){
-					TreeNode<T>* currentNode = q1.dequeue();
-					cout<<currentNode->data<<" ";
-					if(currentNode->left != NULL)	q1.enqueue(currentNode->left);
-					if(currentNode->right != NULL)	q1.enqueue(currentNode->right);
-				}
+	void print()
+	{
+		if (root == NULL)
+		{
+			cout << "The Tree Is Empty\n";
+		}
+		else
+		{
+			Queue<TreeNode<T>*> q1;
+			q1.enqueue(root);
+			while (!q1.isEmpty())
+			{
+				TreeNode<T>* currentNode = q1.dequeue();
+				cout << currentNode->data << " ";
+				if (currentNode->left != NULL)
+					q1.enqueue(currentNode->left);
+				if (currentNode->right != NULL)
+					q1.enqueue(currentNode->right);
 			}
 		}
-	
-	int getNumOfNodes(){
+	}
+
+	int getNumOfNodes()
+	{
 		return numOfNodes;
 	}
-	
-	int height() {
-        return heightHelper(root);
-    }
-	private: int heightHelper(TreeNode<T>* currentNode) {
-        if (currentNode == NULL)
-            return 0;
-        return 1 + std::max(heightHelper(currentNode->left), heightHelper(currentNode->right));
-    }
-	
-	public: void preOrderTraverse(){
-		preOrderTraverseHelper(root);
-		cout<<endl;
+
+	int height()
+	{
+		return heightHelper(root);
 	}
-	private: void preOrderTraverseHelper(TreeNode<T>* currentNode){
-		if(currentNode  == NULL)	return;
-		cout<<currentNode->data<<" ";
+
+private:
+	int heightHelper(TreeNode<T>* currentNode)
+	{
+		if (currentNode == NULL)
+			return 0;
+		return 1 + std::max(heightHelper(currentNode->left), heightHelper(currentNode->right));
+	}
+
+public:
+	void preOrderTraverse()
+	{
+		preOrderTraverseHelper(root);
+		cout << endl;
+	}
+
+private:
+	void preOrderTraverseHelper(TreeNode<T>* currentNode)
+	{
+		if (currentNode == NULL)
+			return;
+		cout << currentNode->data << " ";
 		preOrderTraverseHelper(currentNode->left);
 		preOrderTraverseHelper(currentNode->right);
-		
-	}	
-	
-	public: void inOrderTraverse(){
+	}
+
+public:
+	void inOrderTraverse()
+	{
 		inOrderTraverseHelper(root);
-		cout<<endl;
+		cout << endl;
 	}
-	private: void inOrderTraverseHelper(TreeNode<T>* currentNode){
-		if(currentNode  == NULL)	return;
+
+private:
+	void inOrderTraverseHelper(TreeNode<T>* currentNode)
+	{
+		if (currentNode == NULL)
+			return;
 		inOrderTraverseHelper(currentNode->left);
-		cout<<currentNode->data<<" ";
+		cout << currentNode->data << " ";
 		inOrderTraverseHelper(currentNode->right);
-		
 	}
-	
-	public: void postOrderTraverse(){
+
+public:
+	void postOrderTraverse()
+	{
 		postOrderTraverseHelper(root);
-		cout<<endl;
+		cout << endl;
 	}
-	private: void postOrderTraverseHelper(TreeNode<T>* currentNode){
-		if(currentNode  == NULL)	return;
+
+private:
+	void postOrderTraverseHelper(TreeNode<T>* currentNode)
+	{
+		if (currentNode == NULL)
+			return;
 		postOrderTraverseHelper(currentNode->left);
 		postOrderTraverseHelper(currentNode->right);
-		cout<<currentNode->data<<" ";
-		
+		cout << currentNode->data << " ";
 	}
-	
-    
+
+	void printTree(TreeNode<T>* node, string prefix = "", bool isLeft = true)
+	{
+		if (node == NULL)
+			return;
+
+		cout << prefix;
+		cout << (isLeft ? "|--" : "'--");
+
+		cout << node->data << endl;
+
+		if (node->left || node->right)
+		{
+			printTree(node->left, prefix + (isLeft ? "|   " : "    "), true);
+			printTree(node->right, prefix + (isLeft ? "|   " : "    "), false);
+		}
+	}
+
+public:
+	void printTree()
+	{
+		if (root == NULL)
+		{
+			cout << "The Tree Is Empty\n";
+			return;
+		}
+		cout << root->data << endl;
+		printTree(root->left, "", true);
+		printTree(root->right, "", false);
+	}
 };
+
 int main() {
     BinaryTree<int> tree;
 
