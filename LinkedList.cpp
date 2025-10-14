@@ -229,6 +229,23 @@ public:
         }
     }
 
+    void insertFirst(T _data) {
+        LinkedListNode<T>* newNode = new LinkedListNode<T>(_data, head);
+        head = newNode;
+        if (tail == NULL) tail = newNode;
+        ++(*length);
+    }
+    void deleteFirst() {
+        if (head == NULL) {
+            throw runtime_error("List is empty");
+        }
+        LinkedListNode<T>* temp = head;
+        head = head->next;
+        delete temp;
+        --(*length);
+        if (head == NULL) tail = NULL;
+    }
+
     void deletePointer(T nodeValue, int skip = 0)
     {
         // If List Is Empty
@@ -591,3 +608,4 @@ int main()
 
 }
 */
+
